@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: yit-education-server-config
+  cloud:
+    config:
+      label: master
+      server:
+        git:
+          uri: https://gitee.com/xxxxxxx33131/yit-education-config-repo.git
+          search-paths: respo
+          username: 1225459207@qq.com
+          password: 070620
+
+server:
+  port: 5741
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:5761/eureka/

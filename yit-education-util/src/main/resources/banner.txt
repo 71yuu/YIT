@@ -1,0 +1,8 @@
+___  _ _     _
+\  \/// \ /\/ \ /\
+ \  / | | ||| | ||
+ / /  | \_/|| \_/|
+/_/   \____/\____/
+
+Yuu: https://www.71yuu.com
+Spring Boot Version: ${spring-boot.version}${spring-boot.formatted-version}

@@ -1,0 +1,7 @@
+spring:
+  cloud:
+    config:
+      uri: http://localhost:5741
+      name: yit-education-course-service, yit-education-eureka-client, yit-education-elasticsearch, yit-education-upload
+      label: master
+      profile: dev

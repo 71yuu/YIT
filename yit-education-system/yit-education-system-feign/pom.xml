@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.yuu</groupId>
+		<artifactId>yit-education-system</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>yit-education-system-feign</artifactId>
+
+	<name>yit-education-system-feign</name>
+
+	<dependencies>
+		<!-- Project Begin -->
+		<dependency>
+			<groupId>com.yuu</groupId>
+			<artifactId>yit-education-system-common</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<!-- Project End -->
+
+		<!-- Spring Cloud Feign Begin -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
+		</dependency>
+		<!-- Spring Cloud Feign End -->
+	</dependencies>
+
+</project>
