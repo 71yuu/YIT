@@ -10,8 +10,6 @@ public class User implements Serializable {
 
     private Date gmtModified;
 
-    private Integer statusId;
-
     private Long userNo;
 
     private String mobile;
@@ -45,15 +43,6 @@ public class User implements Serializable {
     public void setGmtModified(Date gmtModified) {
         this.gmtModified = gmtModified;
     }
-
-    public Integer getStatusId() {
-        return statusId;
-    }
-
-    public void setStatusId(Integer statusId) {
-        this.statusId = statusId;
-    }
-
     public Long getUserNo() {
         return userNo;
     }
@@ -95,7 +84,6 @@ public class User implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", gmtCreate=").append(gmtCreate);
         sb.append(", gmtModified=").append(gmtModified);
-        sb.append(", statusId=").append(statusId);
         sb.append(", userNo=").append(userNo);
         sb.append(", mobile=").append(mobile);
         sb.append(", mobileSalt=").append(mobileSalt);

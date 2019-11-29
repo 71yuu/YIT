@@ -35,7 +35,7 @@ public class PcApiUserBiz {
 		if (StringUtils.hasText(req.getMobile())) {
 			c.andMobileLike(PageUtil.like(req.getMobile()));
 		}
-		example.setOrderByClause(" status_id desc, id desc ");
+		example.setOrderByClause("id desc ");
 		Page<User> page = dao.listForPage(req.getPageCurrent(), req.getPageSize(), example);
 		return Result.success(PageUtil.transform(page, UserPageRESQ.class));
 	}

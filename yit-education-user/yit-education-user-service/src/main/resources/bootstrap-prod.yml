@@ -1,7 +1,7 @@
 spring:
   cloud:
     config:
-      uri: http://localhost:5741
+      uri: http://192.168.93.145:5741
       name: yit-education-user-service, yit-education-eureka-client, yit-education-redis, yit-education-common
       label: master
-      profile: dev
+      profile: prod

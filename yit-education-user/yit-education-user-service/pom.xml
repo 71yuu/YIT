@@ -111,7 +111,6 @@
 	</dependencies>
 
 	<build>
-		<finalName>user-service</finalName>
 
 		<plugins>
 			<plugin>

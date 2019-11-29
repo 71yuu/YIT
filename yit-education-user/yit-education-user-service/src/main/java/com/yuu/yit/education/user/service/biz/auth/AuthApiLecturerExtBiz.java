@@ -1,13 +1,6 @@
 package com.yuu.yit.education.user.service.biz.auth;
 
-import java.math.BigDecimal;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-
+import com.xiaoleilu.hutool.util.ObjectUtil;
 import com.yuu.yit.education.user.service.common.bo.auth.AuthLecturerExtViewBO;
 import com.yuu.yit.education.user.service.common.bo.auth.AuthUserExtBankBO;
 import com.yuu.yit.education.user.service.common.dto.auth.AuthLecturerExtViewDTO;
@@ -20,7 +13,13 @@ import com.yuu.yit.education.util.enums.ResultEnum;
 import com.yuu.yit.education.util.enums.StatusIdEnum;
 import com.yuu.yit.education.util.tools.BeanUtil;
 import com.yuu.yit.education.util.tools.SignUtil;
-import com.xiaoleilu.hutool.util.ObjectUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import java.math.BigDecimal;
 
 /**
  * 讲师账户信息表
@@ -101,16 +100,13 @@ public class AuthApiLecturerExtBiz {
 		if (StringUtils.isEmpty(authUserExtBankBO.getMobile())) {
 			return Result.error("手机号码不能为空!");
 		}
-		if (StringUtils.isEmpty(authUserExtBankBO.getClientId())) {
-			return Result.error("clientId不能为空!");
-		}
 		// 查找账户信息
 		LecturerExt lecturerExt = lecturerExtDao.getByLecturerUserNo(authUserExtBankBO.getLecturerUserNo());
 		if (ObjectUtil.isNull(lecturerExt) && StatusIdEnum.YES.getCode().equals(lecturerExt.getStatusId())) {
 			return Result.error("找不到账户信息");
 		}
 
-		String redisSmsCode = redisTemplate.opsForValue().get(authUserExtBankBO.getClientId() + authUserExtBankBO.getMobile());
+		String redisSmsCode = redisTemplate.opsForValue().get(authUserExtBankBO.getMobile());
 		if (StringUtils.isEmpty(redisSmsCode)) {
 			return Result.error("验证码已失效!");
 		}

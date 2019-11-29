@@ -1,17 +1,6 @@
 package com.yuu.yit.education.user.service.biz.auth;
 
-import java.math.BigDecimal;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-
-import com.yuu.yit.education.util.enums.ProfitStatusEnum;
-import com.yuu.yit.education.util.enums.StatusIdEnum;
-import com.yuu.yit.education.util.tools.BeanUtil;
-import com.yuu.yit.education.util.tools.SignUtil;
+import com.xiaoleilu.hutool.util.ObjectUtil;
 import com.yuu.yit.education.user.service.common.bo.auth.AuthLecturerProfitPageBO;
 import com.yuu.yit.education.user.service.common.bo.auth.AuthLecturerProfitSaveBO;
 import com.yuu.yit.education.user.service.common.dto.auth.AuthLecturerProfitPageDTO;
@@ -19,17 +8,23 @@ import com.yuu.yit.education.user.service.dao.LecturerDao;
 import com.yuu.yit.education.user.service.dao.LecturerExtDao;
 import com.yuu.yit.education.user.service.dao.LecturerProfitDao;
 import com.yuu.yit.education.user.service.dao.UserExtDao;
-import com.yuu.yit.education.user.service.dao.impl.mapper.entity.Lecturer;
-import com.yuu.yit.education.user.service.dao.impl.mapper.entity.LecturerExt;
-import com.yuu.yit.education.user.service.dao.impl.mapper.entity.LecturerProfit;
-import com.yuu.yit.education.user.service.dao.impl.mapper.entity.LecturerProfitExample;
+import com.yuu.yit.education.user.service.dao.impl.mapper.entity.*;
 import com.yuu.yit.education.user.service.dao.impl.mapper.entity.LecturerProfitExample.Criteria;
-import com.yuu.yit.education.user.service.dao.impl.mapper.entity.UserExt;
 import com.yuu.yit.education.util.base.BaseBiz;
 import com.yuu.yit.education.util.base.Page;
 import com.yuu.yit.education.util.base.PageUtil;
 import com.yuu.yit.education.util.base.Result;
-import com.xiaoleilu.hutool.util.ObjectUtil;
+import com.yuu.yit.education.util.enums.ProfitStatusEnum;
+import com.yuu.yit.education.util.enums.StatusIdEnum;
+import com.yuu.yit.education.util.tools.BeanUtil;
+import com.yuu.yit.education.util.tools.SignUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import java.math.BigDecimal;
 
 /**
  * 讲师提现日志表
@@ -104,14 +99,6 @@ public class AuthApiLecturerProfitBiz extends BaseBiz {
 		if (StringUtils.isEmpty(lecturerExt.getBankCardNo())) {
 			return Result.error("银行卡未绑定");
 		}
-		if (!StringUtils.hasText(authLecturerProfitSaveBO.getSmsCode())) {
-			return Result.error("输入的验证码不能为空!");
-		}
-
-		String redisSmsCode = redisTemplate.opsForValue().get(authLecturerProfitSaveBO.getClientId() + userExt.getMobile());
-		if (StringUtils.isEmpty(redisSmsCode)) {
-			return Result.error("验证码已失效!");
-		}
 
 		String sign = SignUtil.getByLecturer(lecturerExt.getTotalIncome(), lecturerExt.getHistoryMoney(), lecturerExt.getEnableBalances(), lecturerExt.getFreezeBalances());
 		if (sign.equals(lecturerExt.getSign())) {
@@ -140,4 +127,29 @@ public class AuthApiLecturerProfitBiz extends BaseBiz {
 		}
 	}
 
+	/**
+	 * 讲师可提现余额查询接口
+	 *
+	 * @param lecturerUserNo
+	 * @return
+	 */
+	public Result<BigDecimal> enableBalances(Long lecturerUserNo) {
+		// 查询用户信息
+		UserExt userExt = userExtDao.getByUserNo(lecturerUserNo);
+		if (ObjectUtil.isNull(userExt) || StatusIdEnum.NO.getCode().equals(userExt.getStatusId())) {
+			return Result.error("该用户不存在");
+		}
+		// 查询讲师信息
+		Lecturer lecturer = lecturerDao.getByLecturerUserNo(lecturerUserNo);
+		if (ObjectUtil.isNull(lecturer) || StatusIdEnum.NO.getCode().equals(lecturer.getStatusId())) {
+			return Result.error("该讲师不存在");
+		}
+		// 查询用户账户信息
+		LecturerExt lecturerExt = lecturerExtDao.getByLecturerUserNo(lecturerUserNo);
+		if (ObjectUtil.isNull(lecturerExt) || StatusIdEnum.NO.getCode().equals(lecturerExt.getStatusId())) {
+			return Result.error("该账户不存在");
+		}
+		LecturerExt byLecturerUserNo = lecturerExtDao.getByLecturerUserNo(lecturerUserNo);
+		return Result.success(byLecturerUserNo.getEnableBalances());
+	}
 }
